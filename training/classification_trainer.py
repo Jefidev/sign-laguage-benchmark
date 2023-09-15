@@ -14,6 +14,7 @@ Criterion = TypeVar("Criterion", bound=torch.nn.Module)
 class ClassificationTrainer:
     def __init__(
         self,
+        data: DataLoaders,
         model: Model,
         optimizer: Optimizer,
         criterion: Criterion,
@@ -22,6 +23,7 @@ class ClassificationTrainer:
         verbose: bool = True,
         gradient_clip=False,
     ):
+        self.data = data
         self.model = model
         self.optimizer = optimizer
         self.criterion = criterion
