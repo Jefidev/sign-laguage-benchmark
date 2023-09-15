@@ -1,7 +1,7 @@
 from torch.optim.lr_scheduler import LambdaLR
 
 
-class WarmupLinearSchedule(LambdaLR):
+class WarmupLinearScheduler(LambdaLR):
     """Linear warmup and then linear decay.
     Linearly increases learning rate from 0 to 1 over `warmup_steps` training steps.
     Linearly decreases learning rate from 1. to 0. over remaining `t_total - warmup_steps` steps.
@@ -10,7 +10,7 @@ class WarmupLinearSchedule(LambdaLR):
     def __init__(self, optimizer, warmup_steps, t_total, last_epoch=-1):
         self.warmup_steps = warmup_steps
         self.t_total = t_total
-        super(WarmupLinearSchedule, self).__init__(
+        super(WarmupLinearScheduler, self).__init__(
             optimizer, self.lr_lambda, last_epoch=last_epoch
         )
 
