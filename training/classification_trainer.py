@@ -3,7 +3,7 @@ from typing import NewType, TypeVar, Literal
 import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
-import datetime
+from datetime import datetime
 
 DataLoaders = NewType("DataLoaders", dict[Literal["train", "test"], DataLoader])
 Model = TypeVar("Model", bound=torch.nn.Module)

@@ -32,7 +32,7 @@ def show_random_signs(data, num_signs=10, video=True):
         if video:
             player.attach_video(f"videos/{instance}.mp4")
 
-        player.set_speed(0.5)
+        player.set_speed(0.3)
         player.play()
 
 

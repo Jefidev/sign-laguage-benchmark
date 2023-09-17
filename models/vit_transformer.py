@@ -5,6 +5,23 @@ from einops import repeat
 # https://towardsdatascience.com/implementing-visualttransformer-in-pytorch-184f9f16f632
 
 
+import numpy as np
+import torch
+import pandas as pd
+import random
+
+
+def get_input_mask(data):
+    b, n, f = data.shape
+    mask = torch.sum(data, axis=2)
+
+    # Adding element for the classification token
+    mask = torch.cat([torch.ones(b, 1), mask], dim=1)
+    mask = mask.bool()
+
+    return ~mask
+
+
 class PositionnalEncoding(nn.Module):
     def __init__(self, embedding_size: int, seq_size: int):
         super(PositionnalEncoding, self).__init__()
@@ -100,7 +117,9 @@ class PoseViT(nn.Module):
 
         self.pool = "clf_token"
 
-    def forward(self, x, src_mask):
+    def forward(self, x):
+        x = x.to(torch.float32)
+        src_mask = get_input_mask(x).to(torch.float32)
         x = self.embedding(x)
         x = self.encoder(x, src_key_padding_mask=src_mask)
 

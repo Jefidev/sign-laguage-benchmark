@@ -4,3 +4,5 @@ torch
 torchvision
 tqdm
 einops
+mlflow
+sklearn

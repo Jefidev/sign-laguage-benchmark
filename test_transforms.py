@@ -22,10 +22,10 @@ transforms.append(
     )
 )
 
-transforms.append(Randomize(GaussianNoise(0.002)))
-transforms.append(Randomize(HorizontalFlip(), 0.2))
-transforms.append(Randomize(RandomRotation2D(angle_range=(-0.3, 0.3))))
-transforms.append(Randomize(RandomTranslation()))
+# transforms.append(Randomize(GaussianNoise(0.002)))
+# transforms.append(Randomize(HorizontalFlip(), 0.2))
+# transforms.append(Randomize(RandomRotation2D(angle_range=(-0.3, 0.3))))
+# transforms.append(Randomize(RandomTranslation()))
 
 transforms.append(
     SplitLandmarks({"pose": [0, 23], "left_hand": [23, 44], "right_hand": [44, 65]})
@@ -37,7 +37,7 @@ composed_transforms = Compose(transforms)
 # Dataset configuration
 
 config = LSFBIsolConfig(
-    root="/home/jeromefink/Documents/unamur/signLanguage/Data/lsfb_v2/lsfb_isol",
+    root="/home/jeromefink/Documents/unamur/signLanguage/Data/lsfb_v2/isol",
     split="mini_sample",
     n_labels=2000,
     landmarks=["pose", "left_hand", "right_hand"],
@@ -47,4 +47,4 @@ config = LSFBIsolConfig(
 
 test_dataset = LSFBIsolLandmarks(config)
 
-show_random_signs(test_dataset, num_signs=20)
+show_random_signs(test_dataset, num_signs=30)
