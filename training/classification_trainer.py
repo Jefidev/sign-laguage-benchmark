@@ -4,6 +4,7 @@ import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from datetime import datetime
+from metrics import print_metrics
 
 DataLoaders = NewType("DataLoaders", dict[Literal["train", "test"], DataLoader])
 Model = TypeVar("Model", bound=torch.nn.Module)
@@ -58,6 +59,9 @@ class ClassificationTrainer:
     def train_epoch(self):
         self.model.train()
 
+        for metric in self.train_metrics:
+            metric.reset()
+
         progress_bar = tqdm(
             self.data["train"], desc="Training", disable=(not self.verbose)
         )
@@ -68,6 +72,10 @@ class ClassificationTrainer:
 
             logits, prediction, loss = self.make_prediction(features, target)
 
+            # Compute metrics
+            for metric in self.train_metrics:
+                metric.next(target, logits, prediction, loss)
+
             self.optimizer.zero_grad()
             loss.backward()
 
@@ -76,8 +84,15 @@ class ClassificationTrainer:
 
             self.optimizer.step()
 
+            progress_bar.set_postfix(loss=loss.item())
+
+        print_metrics(self.train_metrics)
+
     def test_epoch(self):
         self.model.eval()
+
+        for metric in self.test_metrics:
+            metric.reset()
 
         progress_bar = tqdm(
             self.data["test"], desc="Testing", disable=(not self.verbose)
@@ -88,6 +103,14 @@ class ClassificationTrainer:
             target = target.to(self.device)
 
             logits, prediction, loss = self.make_prediction(features, target)
+
+            # Compute metrics
+            for metric in self.test_metrics:
+                metric.next(target, logits, prediction, loss)
+
+            progress_bar.set_postfix(loss=loss.item())
+
+        print_metrics(self.test_metrics)
 
     def fit(self, epochs: int, save_best: bool = False):
         start = datetime.now()

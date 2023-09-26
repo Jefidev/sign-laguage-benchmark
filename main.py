@@ -9,6 +9,7 @@ from training import ClassificationTrainer
 from transforms import MergeLandmarks, FlattenLandmarks
 from sign_language_tools.common.transforms import Compose
 from sign_language_tools.pose.transform import Padding
+from metrics import Accuracy
 
 n_labels = 2000
 n_epochs = 100
@@ -32,7 +33,7 @@ test_transforms = Compose([merge, padding, flatten])
 
 train_config = LSFBIsolConfig(
     root=DS_ROOT,
-    split="mini_sample",
+    split="train",
     n_labels=n_labels,
     landmarks=["pose", "left_hand", "right_hand"],
     sequence_max_length=seq_size,
@@ -42,7 +43,7 @@ train_config = LSFBIsolConfig(
 
 test_config = LSFBIsolConfig(
     root=DS_ROOT,
-    split="mini_sample",
+    split="test",
     n_labels=n_labels,
     landmarks=["pose", "left_hand", "right_hand"],
     sequence_max_length=seq_size,
@@ -57,8 +58,8 @@ test_dataset = LSFBIsolLandmarks(test_config)
 # Create data loader
 data = {}
 
-data["train"] = DataLoader(train_dataset, batch_size=32, shuffle=True)
-data["test"] = DataLoader(test_dataset, batch_size=32, shuffle=True)
+data["train"] = DataLoader(train_dataset, batch_size=128, shuffle=True)
+data["test"] = DataLoader(test_dataset, batch_size=128, shuffle=True)
 
 
 # Create model
@@ -85,6 +86,9 @@ trainer = ClassificationTrainer(
 )
 
 # Add metrics TODO
+
+trainer.add_train_metric(Accuracy())
+trainer.add_test_metric(Accuracy())
 
 # Train
 trainer.fit(n_epochs)
