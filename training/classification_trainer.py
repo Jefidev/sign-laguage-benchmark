@@ -42,11 +42,11 @@ class ClassificationTrainer:
 
         self.current_epoch = 0
 
-    def add_train_metric(self, metric):
-        self.train_metrics.append(metric)
+    def add_train_metric(self, name, metric):
+        self.train_metrics.append((name, metric))
 
-    def add_test_metric(self, metric):
-        self.test_metrics.append(metric)
+    def add_test_metric(self, name, metric):
+        self.test_metrics.append((name, metric))
 
     def make_prediction(self, features, targets):
         logits = self.model(features)
@@ -59,7 +59,7 @@ class ClassificationTrainer:
     def train_epoch(self):
         self.model.train()
 
-        for metric in self.train_metrics:
+        for _, metric in self.train_metrics:
             metric.reset()
 
         progress_bar = tqdm(
@@ -73,8 +73,8 @@ class ClassificationTrainer:
             logits, prediction, loss = self.make_prediction(features, target)
 
             # Compute metrics
-            for metric in self.train_metrics:
-                metric.next(target, logits, prediction, loss)
+            for _, metric in self.train_metrics:
+                metric(prediction, target)
 
             self.optimizer.zero_grad()
             loss.backward()
@@ -91,7 +91,7 @@ class ClassificationTrainer:
     def test_epoch(self):
         self.model.eval()
 
-        for metric in self.test_metrics:
+        for _, metric in self.test_metrics:
             metric.reset()
 
         progress_bar = tqdm(
@@ -105,8 +105,8 @@ class ClassificationTrainer:
             logits, prediction, loss = self.make_prediction(features, target)
 
             # Compute metrics
-            for metric in self.test_metrics:
-                metric.next(target, logits, prediction, loss)
+            for _, metric in self.test_metrics:
+                metric(prediction, target)
 
             progress_bar.set_postfix(loss=loss.item())
 

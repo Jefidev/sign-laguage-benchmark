@@ -9,7 +9,7 @@ from training import ClassificationTrainer
 from transforms import MergeLandmarks, FlattenLandmarks
 from sign_language_tools.common.transforms import Compose
 from sign_language_tools.pose.transform import Padding
-from metrics import Accuracy
+from torchmetrics import Accuracy
 
 n_labels = 2000
 n_epochs = 100
@@ -33,7 +33,7 @@ test_transforms = Compose([merge, padding, flatten])
 
 train_config = LSFBIsolConfig(
     root=DS_ROOT,
-    split="train",
+    split="mini_sample",
     n_labels=n_labels,
     landmarks=["pose", "left_hand", "right_hand"],
     sequence_max_length=seq_size,
@@ -43,7 +43,7 @@ train_config = LSFBIsolConfig(
 
 test_config = LSFBIsolConfig(
     root=DS_ROOT,
-    split="test",
+    split="mini_sample",
     n_labels=n_labels,
     landmarks=["pose", "left_hand", "right_hand"],
     sequence_max_length=seq_size,
@@ -85,10 +85,19 @@ trainer = ClassificationTrainer(
     scheduler,
 )
 
-# Add metrics TODO
+# Accuracy
+trainer.add_train_metric("accuracy", Accuracy(task="multiclass", num_classes=n_labels))
+trainer.add_test_metric("accuracy", Accuracy(task="multiclass", num_classes=n_labels))
 
-trainer.add_train_metric(Accuracy())
-trainer.add_test_metric(Accuracy())
+# Top 10 accuracy
+trainer.add_train_metric(
+    "top-10 accuracy", Accuracy(task="multiclass", num_classes=n_labels, top_k=10)
+)
+trainer.add_test_metric(
+    "top-10 accuracy", Accuracy(task="multiclass", num_classes=n_labels, top_k=10)
+)
+
+# F1 score
 
 # Train
 trainer.fit(n_epochs)

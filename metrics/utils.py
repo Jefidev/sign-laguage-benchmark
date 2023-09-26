@@ -4,12 +4,9 @@ from metrics import Metric
 
 def print_metrics(metrics: list[Metric]):
     table_content = [[], []]
-    for m in metrics:
-        if not m.printable:
-            continue
+    for name, metric in metrics:
+        value = metric.compute()
 
-        name = m.name
-        value = m.value()
         if isinstance(value, (list, tuple)):
             for i, v in enumerate(value):
                 table_content[0].append(f"{name} {i}")
