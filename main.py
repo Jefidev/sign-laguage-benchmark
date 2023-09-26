@@ -10,6 +10,7 @@ from transforms import MergeLandmarks, FlattenLandmarks
 from sign_language_tools.common.transforms import Compose
 from sign_language_tools.pose.transform import Padding
 from torchmetrics import Accuracy, F1Score
+from loggers.wandb_logger import WandbLogger
 
 n_labels = 2000
 n_epochs = 100
@@ -83,6 +84,9 @@ trainer = ClassificationTrainer(
     optimizer,
     criterion,
     scheduler,
+    logger=WandbLogger(
+        "posevit", {"n_labels": n_labels, "seq_size": seq_size}, model, criterion
+    ),
 )
 
 # Accuracy

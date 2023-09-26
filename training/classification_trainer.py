@@ -23,12 +23,14 @@ class ClassificationTrainer:
         device: torch.device = None,
         verbose: bool = True,
         gradient_clip=False,
+        logger=None,
     ):
         self.data = data
         self.model = model
         self.optimizer = optimizer
         self.criterion = criterion
         self.scheduler = scheduler
+        self.logger = logger
 
         if device is None:
             device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -66,11 +68,16 @@ class ClassificationTrainer:
             self.data["train"], desc="Training", disable=(not self.verbose)
         )
 
+        # Accumulator for loss
+        loss_accum = 0
+
         for index, (features, target) in enumerate(progress_bar):
             features = features.to(self.device)
             target = target.to(self.device)
 
             logits, prediction, loss = self.make_prediction(features, target)
+
+            loss_accum += loss.item()
 
             # Compute metrics
             for _, metric in self.train_metrics:
@@ -88,6 +95,8 @@ class ClassificationTrainer:
 
         print_metrics(self.train_metrics)
 
+        return loss_accum / len(self.data["train"])
+
     def test_epoch(self):
         self.model.eval()
 
@@ -98,11 +107,15 @@ class ClassificationTrainer:
             self.data["test"], desc="Testing", disable=(not self.verbose)
         )
 
+        # accumulate loss
+        loss_accum = 0
+
         for index, (features, target) in enumerate(progress_bar):
             features = features.to(self.device)
             target = target.to(self.device)
 
             logits, prediction, loss = self.make_prediction(features, target)
+            loss_accum += loss.item()
 
             # Compute metrics
             for _, metric in self.test_metrics:
@@ -111,6 +124,7 @@ class ClassificationTrainer:
             progress_bar.set_postfix(loss=loss.item())
 
         print_metrics(self.test_metrics)
+        return loss_accum / len(self.data["test"])
 
     def fit(self, epochs: int, save_best: bool = False):
         start = datetime.now()
@@ -121,8 +135,12 @@ class ClassificationTrainer:
             self.current_epoch = epoch
 
             print("-" * 10, "EPOCH", epoch + 1, "/", epochs)
-            self.train_epoch()
-            self.test_epoch()
+            t_loss = self.train_epoch()
+            v_loss = self.test_epoch()
+
+            if self.logger is not None:
+                self.logger.log_metrics(self.train_metrics, self.test_metrics)
+                self.logger.log_losses(t_loss, v_loss)
 
             if self.scheduler is not None:
                 self.scheduler.step()
