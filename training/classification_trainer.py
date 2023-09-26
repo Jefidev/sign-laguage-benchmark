@@ -4,7 +4,7 @@ import torch
 from torch.utils.data import DataLoader
 from tqdm import tqdm
 from datetime import datetime
-from metrics import print_metrics
+from metrics.utils import print_metrics
 
 DataLoaders = NewType("DataLoaders", dict[Literal["train", "test"], DataLoader])
 Model = TypeVar("Model", bound=torch.nn.Module)
@@ -74,7 +74,7 @@ class ClassificationTrainer:
 
             # Compute metrics
             for _, metric in self.train_metrics:
-                metric(prediction, target)
+                metric(logits, target)
 
             self.optimizer.zero_grad()
             loss.backward()
@@ -106,7 +106,7 @@ class ClassificationTrainer:
 
             # Compute metrics
             for _, metric in self.test_metrics:
-                metric(prediction, target)
+                metric(logits, target)
 
             progress_bar.set_postfix(loss=loss.item())
 

@@ -1,8 +1,7 @@
 from tabulate import tabulate
-from metrics import Metric
 
 
-def print_metrics(metrics: list[Metric]):
+def print_metrics(metrics: list[tuple]):
     table_content = [[], []]
     for name, metric in metrics:
         value = metric.compute()
