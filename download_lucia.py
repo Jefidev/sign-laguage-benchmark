@@ -2,7 +2,7 @@ from lsfb_dataset import Downloader
 
 downloader = Downloader(
     dataset="isol",
-    destination="/gpfs/projects/acad/lsfb/datasets/lsfb_v2_isol/isol",
+    destination="/gpfs/projects/acad/lsfb/datasets/lsfb_v2/isol",
     include_videos=True,
     include_raw_poses=True,
     include_cleaned_poses=True,
