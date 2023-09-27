@@ -1,7 +1,7 @@
 #!/bin/bash
 # Submission script for Lucia
 #SBATCH --job-name=download_data
-#SBATCH --time=04:00:00 # hh:mm:ss
+#SBATCH --time=08:00:00 # hh:mm:ss
 #
 #SBATCH --ntasks=1
 #SBATCH --mem-per-cpu=4096 # 4GB
