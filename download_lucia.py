@@ -6,7 +6,7 @@ downloader = Downloader(
     include_videos=True,
     include_raw_poses=True,
     include_cleaned_poses=True,
-    skip_existing_files=False,
+    skip_existing_files=True,
 )
 
 downloader.download()
@@ -18,5 +18,5 @@ downloader = Downloader(
     include_videos=True,
     include_raw_poses=True,
     include_cleaned_poses=True,
-    skip_existing_files=False,
+    skip_existing_files=True,
 )
