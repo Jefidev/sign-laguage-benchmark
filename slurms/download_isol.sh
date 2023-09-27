@@ -12,10 +12,10 @@
 #
 #SBATCH --account=lsfb
 #
-#SBATCH --output=download.out
+#SBATCH --output=download_isol.out
 
 module purge
 module load PyTorch
 
 source ./venv/bin/activate
-python download_lucia.py
+python download_isol_lucia.py
