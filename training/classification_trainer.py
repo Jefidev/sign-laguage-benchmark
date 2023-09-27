@@ -26,14 +26,14 @@ class ClassificationTrainer:
         verbose: bool = True,
         gradient_clip=False,
     ):
-        self.data = data
-        self.model = model
-        self.optimizer = optimizer
-        self.criterion = criterion
-        self.scheduler = scheduler
-
         if device is None:
             device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+        self.data = data
+        self.model = model.to(device)
+        self.optimizer = optimizer.to(device)
+        self.criterion = criterion.to(device)
+        self.scheduler = scheduler.to(device) if scheduler is not None else None
 
         self.device = device
         self.verbose = verbose
