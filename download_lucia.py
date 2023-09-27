@@ -18,8 +18,8 @@ while finished == False:
         downloader.download()
         finished = True
     except SSLError:
-        print("SSL Error, retrying in 10 sec...")
-        time.sleep(10)
+        print("SSL Error, retrying in 20 sec...")
+        time.sleep(20)
 
 
 downloader = Downloader(
@@ -37,5 +37,5 @@ while finished == False:
         downloader.download()
         finished = True
     except SSLError:
-        print("SSL Error, retrying in 10 sec...")
-        time.sleep(10)
+        print("SSL Error, retrying in 20 sec...")
+        time.sleep(20)
