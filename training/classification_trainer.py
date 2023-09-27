@@ -29,6 +29,8 @@ class ClassificationTrainer:
         if device is None:
             device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
+        print("Using device:", device)
+
         self.data = data
         self.model = model.to(device)
         self.optimizer = optimizer.to(device)
