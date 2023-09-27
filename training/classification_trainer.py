@@ -5,6 +5,8 @@ from torch.utils.data import DataLoader
 from tqdm import tqdm
 from datetime import datetime
 from metrics.utils import print_metrics
+from utils import log_metrics, log_losses
+import wandb
 
 DataLoaders = NewType("DataLoaders", dict[Literal["train", "test"], DataLoader])
 Model = TypeVar("Model", bound=torch.nn.Module)
@@ -23,14 +25,12 @@ class ClassificationTrainer:
         device: torch.device = None,
         verbose: bool = True,
         gradient_clip=False,
-        logger=None,
     ):
         self.data = data
         self.model = model
         self.optimizer = optimizer
         self.criterion = criterion
         self.scheduler = scheduler
-        self.logger = logger
 
         if device is None:
             device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
@@ -138,10 +138,10 @@ class ClassificationTrainer:
             t_loss = self.train_epoch()
             v_loss = self.test_epoch()
 
-            if self.logger is not None:
+            if wandb.run is not None:
                 print("Logging metrics...")
-                self.logger.log_metrics(self.train_metrics, self.test_metrics)
-                self.logger.log_losses(t_loss, v_loss)
+                log_metrics(self.train_metrics, self.test_metrics)
+                log_losses(t_loss, v_loss)
 
             if self.scheduler is not None:
                 self.scheduler.step()

@@ -6,11 +6,11 @@ from schedulers import WarmupLinearScheduler
 import math
 from training import ClassificationTrainer
 from utils import load_datasets, set_common_metrics
+import wandb
 
 
 def poseVIT_prediction():
-
-    wandb.
+    config = wandb.config
     warmups_steps = math.floor(config["n_epochs"] * 0.2)
 
     # Load the datasets
@@ -50,7 +50,12 @@ def poseVIT_prediction():
 
     # Create trainer
     trainer = ClassificationTrainer(
-        data, model, optimizer, criterion, scheduler, logger=logger
+        data,
+        model,
+        optimizer,
+        criterion,
+        scheduler,
+        gradient_clip=config["gradient_clip"],
     )
 
     # Attach metrics

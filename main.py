@@ -1,7 +1,6 @@
 import math
 import click
 from experiments.prediction import poseVIT_prediction
-from loggers.wandb_logger import WandbLogger
 import wandb
 
 
@@ -46,10 +45,13 @@ def run_experiment(experiment, dataset, dry_run):
         }
 
         sweep_id = wandb.sweep(sweep_config, project="test_sweep")
-        wandb.init(config=config_defaults)
+
+        def ugly_stuff():
+            wandb.init(config=config_defaults)
+            poseVIT_prediction()
 
         # run sweep
-        wandb.agent(sweep_id, function=poseVIT_prediction)
+        wandb.agent(sweep_id, function=ugly_stuff)
 
 
 if __name__ == "__main__":

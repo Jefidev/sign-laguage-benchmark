@@ -1,6 +1,7 @@
 from transforms import get_skeleton_transforms, get_data_augmentation_transforms
 from lsfb_dataset.datasets import LSFBIsolConfig, LSFBIsolLandmarks
 from torchmetrics import Accuracy, F1Score
+import wandb
 
 
 def load_datasets(path, seq_size, n_labels, data_augmentation=False, dry_run=False):
@@ -88,3 +89,16 @@ def set_common_metrics(trainer, n_labels):
         "f1-score", F1Score(task="multiclass", num_classes=n_labels)
     )
     pass
+
+
+def log_metrics(train_metrics, test_metrics):
+    for metric_name, metric_value in train_metrics:
+        wandb.log({"train " + metric_name: metric_value.compute()})
+
+    for metric_name, metric_value in test_metrics:
+        wandb.log({"valid " + metric_name: metric_value.compute()})
+
+
+def log_losses(train_loss, test_loss):
+    wandb.log({"train loss": train_loss})
+    wandb.log({"valid loss": test_loss})
