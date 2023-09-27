@@ -1,4 +1,8 @@
 from lsfb_dataset import Downloader
+import time
+from requests.exceptions import SSLError
+
+finished = False
 
 downloader = Downloader(
     dataset="isol",
@@ -9,7 +13,13 @@ downloader = Downloader(
     skip_existing_files=True,
 )
 
-downloader.download()
+while finished == False:
+    try:
+        downloader.download()
+        finished = True
+    except SSLError:
+        print("SSL Error, retrying in 10 sec...")
+        time.sleep(10)
 
 
 downloader = Downloader(
@@ -20,3 +30,12 @@ downloader = Downloader(
     include_cleaned_poses=True,
     skip_existing_files=True,
 )
+finished = False
+
+while finished == False:
+    try:
+        downloader.download()
+        finished = True
+    except SSLError:
+        print("SSL Error, retrying in 10 sec...")
+        time.sleep(10)
