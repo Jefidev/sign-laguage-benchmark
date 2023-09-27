@@ -139,6 +139,7 @@ class ClassificationTrainer:
             v_loss = self.test_epoch()
 
             if self.logger is not None:
+                print("Logging metrics...")
                 self.logger.log_metrics(self.train_metrics, self.test_metrics)
                 self.logger.log_losses(t_loss, v_loss)
 
