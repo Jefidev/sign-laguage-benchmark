@@ -1,5 +1,5 @@
-/home/jeromefink/Documents/unamur/signLanguage/Code/sign-language-tools
-/home/jeromefink/Documents/unamur/signLanguage/Code/lsfb-dataset/lsfb-dataset
+sign-language-tools
+lsfb-dataset
 torch
 torchvision
 tqdm
