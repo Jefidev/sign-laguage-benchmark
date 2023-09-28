@@ -19,4 +19,5 @@ while finished == False:
         finished = True
     except Exception as e:
         print("SSL Error, retrying in 20 sec...")
+        print(e)
         time.sleep(20)
