@@ -6,7 +6,7 @@ import wandb
 config_defaults = {
     "n_labels": 250,
     "seq_size": 32,
-    "n_epochs": 10,
+    "n_epochs": 300,
     "data_augmentation": False,
     "gradient_clip": False,
     "batch_size": 128,
@@ -45,7 +45,6 @@ def run_experiment(labels, experiment, dataset, dry_run):
         "metric": {"name": "valid balanced accuracy", "goal": "maximize"},
         "parameters": {
             "seq_size": {"values": [16, 32, 64]},
-            "n_epochs": {"values": [100, 1000]},
             "data_augmentation": {"values": [True, False]},
             "gradient_clip": {"values": [True, False]},
             "batch_size": {"values": [128, 256, 512]},
