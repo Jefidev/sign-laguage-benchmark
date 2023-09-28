@@ -7,7 +7,7 @@ from sign_language_tools.pose.transform import (
     RandomTranslation,
 )
 
-from sign_language_tools.common.transforms import Compose
+from sign_language_tools.pose.transform import Compose
 
 from transforms import MergeLandmarks, SplitLandmarks, Randomize
 

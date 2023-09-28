@@ -22,11 +22,11 @@ def train():
 
 
 @click.command()
-@click.option("-l", "--lables", default=250, help="Number of labels to predict")
+@click.option("-l", "--labels", default=250, help="Number of labels to predict")
 @click.option(
     "-e",
-    -"--experiment",
-    default=" test ViT prediction",
+    "--experiment",
+    default="test-run",
     help="Name of the Experiment to run",
 )
 @click.option(
@@ -36,7 +36,7 @@ def train():
     help="Path to the LSFB dataset",
 )
 @click.option("--dry-run", is_flag=True)
-def run_experiment(labels, dataset, experiment, dry_run):
+def run_experiment(labels, experiment, dataset, dry_run):
     """Run Sign Language Prediction Experiment"""
 
     # Sweep configuration

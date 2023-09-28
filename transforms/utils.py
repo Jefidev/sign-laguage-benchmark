@@ -1,11 +1,10 @@
-from transforms import MergeLandmarks, FlattenLandmarks, Randomize
-from sign_language_tools.pose.transform import Padding
-from sign_language_tools.common.transforms import Compose
+from transforms import MergeLandmarks, FlattenLandmarks, Randomize, Padding
 from sign_language_tools.pose.transform import (
     HorizontalFlip,
     GaussianNoise,
     RandomRotation2D,
     RandomTranslation,
+    Compose,
 )
 
 

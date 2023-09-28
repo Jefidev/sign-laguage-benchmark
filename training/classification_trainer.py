@@ -33,9 +33,9 @@ class ClassificationTrainer:
 
         self.data = data
         self.model = model.to(device)
-        self.optimizer = optimizer.to(device)
+        self.optimizer = optimizer
         self.criterion = criterion.to(device)
-        self.scheduler = scheduler.to(device) if scheduler is not None else None
+        self.scheduler = scheduler if scheduler is not None else None
 
         self.device = device
         self.verbose = verbose

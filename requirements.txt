@@ -4,7 +4,7 @@ torch
 torchvision
 tqdm
 einops
-mlflow
+wandb
 sklearn
 torchmetrics
 click
