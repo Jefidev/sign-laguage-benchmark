@@ -13,7 +13,7 @@
 #
 #SBATCH --account=lsfb
 #
-#SBATCH --output=ViTPose_250.out
+#SBATCH --output=./output/ViTPose_250.out
 
 module purge
 module load PyTorch
