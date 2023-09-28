@@ -41,7 +41,7 @@ def run_experiment(labels, experiment, dataset, dry_run):
 
     # Sweep configuration
     sweep_config = {
-        "method": "grid",
+        "method": "bayes",
         "metric": {"name": "valid balanced accuracy", "goal": "maximize"},
         "parameters": {
             "seq_size": {"values": [16, 32, 64]},
@@ -59,7 +59,7 @@ def run_experiment(labels, experiment, dataset, dry_run):
     sweep_id = wandb.sweep(sweep_config, project=experiment)
 
     # run sweep
-    wandb.agent(sweep_id, function=train)
+    wandb.agent(sweep_id, function=train, count=20)
 
 
 if __name__ == "__main__":
