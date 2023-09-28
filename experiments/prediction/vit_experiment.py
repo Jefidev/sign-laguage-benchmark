@@ -26,10 +26,10 @@ def poseVIT_prediction():
     data = {}
 
     data["train"] = DataLoader(
-        train_dataset, batch_size=config["batch_size"], shuffle=True
+        train_dataset, batch_size=config["batch_size"], shuffle=True, num_workers=8
     )
     data["test"] = DataLoader(
-        test_dataset, batch_size=config["batch_size"], shuffle=True
+        test_dataset, batch_size=config["batch_size"], shuffle=True, num_workers=8
     )
 
     # Create model
