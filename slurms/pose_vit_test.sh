@@ -1,6 +1,6 @@
 #!/bin/bash
 # Submission script for Lucia
-#SBATCH --job-name=ViTPose
+#SBATCH --job-name=ViTPose-debug
 #SBATCH --time=08:00:00 # hh:mm:ss
 #
 #SBATCH --ntasks=1
@@ -13,7 +13,7 @@
 #
 #SBATCH --account=lsfb
 #
-#SBATCH --output=./output/ViTPose_250.out
+#SBATCH --output=./output/test-run.out
 
 module purge
 module load PyTorch
