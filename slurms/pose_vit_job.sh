@@ -19,6 +19,7 @@ module purge
 module load PyTorch
 
 source ./venv/bin/activate
+pip install -r requirements.txt
 nvidia-smi
 python poseVIT_classification.py \
  -l 250\
