@@ -11,12 +11,13 @@ import pandas as pd
 import random
 
 
-def get_input_mask(data):
+def get_input_mask(data, device):
     b, n, f = data.shape
     mask = torch.sum(data, axis=2)
 
     # Adding element for the classification token
-    mask = torch.cat([torch.ones(b, 1), mask], dim=1)
+    ones = torch.ones(b, 1).to(device)
+    mask = torch.cat([ones, mask], dim=1)
     mask = mask.bool()
 
     return ~mask
@@ -94,8 +95,14 @@ class PoseViT(nn.Module):
         num_layer=2,
         nhead=4,
         triplet_embedding=512,
+        device=None,
     ):
         super(PoseViT, self).__init__()
+
+        if device is None:
+            device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
+        self.device = device
 
         self.embedding = PositionnalEncoding(
             embedding_size=embedding_size, seq_size=seq_size
@@ -119,7 +126,7 @@ class PoseViT(nn.Module):
 
     def forward(self, x):
         x = x.to(torch.float32)
-        src_mask = get_input_mask(x).to(torch.float32)
+        src_mask = get_input_mask(x, self.device).to(torch.float32)
         x = self.embedding(x)
         x = self.encoder(x, src_key_padding_mask=src_mask)
 
