@@ -1,7 +1,7 @@
 #!/bin/bash
 # Submission script for Lucia
 #SBATCH --job-name=ViTPose
-#SBATCH --time=08:00:00 # hh:mm:ss
+#SBATCH --time=20:00:00 # hh:mm:ss
 #
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
