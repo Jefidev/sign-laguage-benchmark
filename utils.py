@@ -2,6 +2,7 @@ from transforms import get_skeleton_transforms, get_data_augmentation_transforms
 from lsfb_dataset.datasets import LSFBIsolConfig, LSFBIsolLandmarks
 from torchmetrics import Accuracy, F1Score
 import wandb
+import torch
 
 
 def load_datasets(path, seq_size, n_labels, data_augmentation=False, dry_run=False):
@@ -42,51 +43,59 @@ def load_datasets(path, seq_size, n_labels, data_augmentation=False, dry_run=Fal
 
 
 def set_common_metrics(trainer, n_labels):
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+
     # Accuracy
     trainer.add_train_metric(
-        "accuracy", Accuracy(task="multiclass", num_classes=n_labels)
+        "accuracy", Accuracy(task="multiclass", num_classes=n_labels).to(device)
     )
     trainer.add_test_metric(
-        "accuracy", Accuracy(task="multiclass", num_classes=n_labels)
+        "accuracy", Accuracy(task="multiclass", num_classes=n_labels).to(device)
     )
 
     # Top 10 accuracy
     trainer.add_train_metric(
-        "top-10 accuracy", Accuracy(task="multiclass", num_classes=n_labels, top_k=10)
+        "top-10 accuracy",
+        Accuracy(task="multiclass", num_classes=n_labels, top_k=10).to(device),
     )
     trainer.add_test_metric(
-        "top-10 accuracy", Accuracy(task="multiclass", num_classes=n_labels, top_k=10)
+        "top-10 accuracy",
+        Accuracy(task="multiclass", num_classes=n_labels, top_k=10).to(device),
     )
 
     # Balanced accuracy
     trainer.add_train_metric(
         "balanced accuracy",
-        Accuracy(task="multiclass", num_classes=n_labels, average="macro"),
+        Accuracy(task="multiclass", num_classes=n_labels, average="macro").to(device),
     )
 
     trainer.add_test_metric(
         "balanced accuracy",
-        Accuracy(task="multiclass", num_classes=n_labels, average="macro"),
+        Accuracy(task="multiclass", num_classes=n_labels, average="macro").to(device),
     )
 
     # Balanced accuracy
     trainer.add_train_metric(
         "balanced top-10 accuracy",
-        Accuracy(task="multiclass", num_classes=n_labels, average="macro", top_k=10),
+        Accuracy(task="multiclass", num_classes=n_labels, average="macro", top_k=10).to(
+            device
+        ),
     )
 
     trainer.add_test_metric(
         "balanced top-10 accuracy",
-        Accuracy(task="multiclass", num_classes=n_labels, average="macro", top_k=10),
+        Accuracy(task="multiclass", num_classes=n_labels, average="macro", top_k=10).to(
+            device
+        ),
     )
 
     # F1 score
 
     trainer.add_train_metric(
-        "f1-score", F1Score(task="multiclass", num_classes=n_labels)
+        "f1-score", F1Score(task="multiclass", num_classes=n_labels).to(device)
     )
     trainer.add_test_metric(
-        "f1-score", F1Score(task="multiclass", num_classes=n_labels)
+        "f1-score", F1Score(task="multiclass", num_classes=n_labels).to(device)
     )
     pass
 
