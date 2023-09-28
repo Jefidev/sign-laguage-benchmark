@@ -4,7 +4,7 @@
 #SBATCH --time=08:00:00 # hh:mm:ss
 #
 #SBATCH --ntasks=1
-#SBATCH --mem-per-cpu=12288 # 
+#SBATCH --mem-per-cpu=20480 # 
 #SBATCH --partition=batch
 #
 #SBATCH --mail-user=jerome.fink@unamur.be
