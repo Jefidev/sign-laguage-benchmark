@@ -44,11 +44,11 @@ def run_experiment(labels, experiment, dataset, dry_run):
         "method": "grid",
         "metric": {"name": "valid balanced accuracy", "goal": "maximize"},
         "parameters": {
-            "seq_size": {"values": [32, 64, 128, 256]},
-            "n_epochs": {"values": [10, 100, 1000]},
+            "seq_size": {"values": [16, 32, 64]},
+            "n_epochs": {"values": [100, 1000]},
             "data_augmentation": {"values": [True, False]},
             "gradient_clip": {"values": [True, False]},
-            "batch_size": {"values": [32, 64, 128, 256, 512]},
+            "batch_size": {"values": [128, 256, 512]},
             "embedding_size": {"values": [32, 64, 128, 256]},
         },
     }
