@@ -15,7 +15,7 @@ def poseVIT_contrastive(n_labels, dataset_path, project_name, dry_run):
     config_defaults = {
         "n_labels": 250,
         "seq_size": 32,
-        "n_epochs": 300,
+        "n_epochs": 500,
         "data_augmentation": True,
         "gradient_clip": False,
         "batch_size": 128,
@@ -33,7 +33,7 @@ def poseVIT_contrastive(n_labels, dataset_path, project_name, dry_run):
         "metric": {"name": "valid balanced accuracy", "goal": "maximize"},
         "parameters": {
             "seq_size": {"values": [16, 32, 64]},
-            "batch_size": {"values": [128, 256, 512]},
+            "batch_size": {"values": [256, 512, 1024]},
             "hidden_size": {"values": [32, 64, 128, 256]},
             "embedding_size": {"values": [32, 64, 128, 256]},
         },
@@ -43,12 +43,11 @@ def poseVIT_contrastive(n_labels, dataset_path, project_name, dry_run):
     config_defaults["dataset"] = dataset_path
     config_defaults["dry_run"] = dry_run
 
-    # sweep_id = wandb.sweep(sweep_config, project=project_name)
+    sweep_id = wandb.sweep(sweep_config, project=project_name)
 
-    # run sweep
+    #  run sweep
     wandb.init(config=config_defaults)
-    # wandb.agent(sweep_id, function=start_run, count=25)
-    start_run()
+    wandb.agent(sweep_id, function=start_run, count=25)
 
 
 def start_run():
