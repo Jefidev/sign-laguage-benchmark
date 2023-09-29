@@ -2,6 +2,7 @@ from models import PoseViT
 from torch.utils.data import DataLoader
 import torch
 import torch.nn as nn
+from pytorch_metric_learning import losses
 from schedulers import WarmupLinearScheduler
 import math
 from training import ClassificationTrainer
@@ -9,7 +10,7 @@ from utils import load_datasets, set_common_metrics
 import wandb
 
 
-def poseVIT_prediction(n_labels, dataset_path, project_name, dry_run):
+def poseVIT_contrastive(n_labels, dataset_path, project_name, dry_run):
     # Default configuration
     config_defaults = {
         "n_labels": 250,
@@ -18,12 +19,15 @@ def poseVIT_prediction(n_labels, dataset_path, project_name, dry_run):
         "data_augmentation": False,
         "gradient_clip": False,
         "batch_size": 128,
+        "hidden_size": 64,
         "embedding_size": 64,
+        "criterion": "NTXent",
         "dataset": "/home/jeromefink/Documents/unamur/signLanguage/Data/lsfb_v2/isol",
         "dry_run": True,
     }
 
     # Sweep configuration
+    """
     sweep_config = {
         "method": "bayes",
         "metric": {"name": "valid balanced accuracy", "goal": "maximize"},
@@ -35,16 +39,16 @@ def poseVIT_prediction(n_labels, dataset_path, project_name, dry_run):
             "embedding_size": {"values": [32, 64, 128, 256]},
         },
     }
-
+    """
     config_defaults["n_labels"] = n_labels
     config_defaults["dataset"] = dataset_path
     config_defaults["dry_run"] = dry_run
 
-    sweep_id = wandb.sweep(sweep_config, project=project_name)
+    # sweep_id = wandb.sweep(sweep_config, project=project_name)
 
     # run sweep
-    wandb.agent(sweep_id, function=start_run, count=25)
-
+    # wandb.agent(sweep_id, function=start_run, count=25)
+    wandb.init(project="test-contrastive", config=config_defaults)
     start_run()
     pass
 
@@ -75,12 +79,20 @@ def start_run():
     # Create model
     model = PoseViT(
         config["n_labels"],
-        embedding_size=config["embedding_size"],
+        embedding_size=config["hidden_size"],
         seq_size=config["seq_size"],
+        contrastive=True,
+        contrastive_embedding=config["embedding_size"],
     )
 
     # Criterion
-    criterion = nn.CrossEntropyLoss()
+
+    if config["criterion"] == "triplet":
+        criterion = losses.TripletMarginLoss()
+    elif config["criterion"] == "NTXent":
+        criterion = losses.NTXentLoss()
+    else:
+        raise ValueError("Criterion not supported")
 
     # Optimizer
     optimizer = torch.optim.Adam(model.parameters(), lr=2e-3)

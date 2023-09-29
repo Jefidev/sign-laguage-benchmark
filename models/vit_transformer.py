@@ -66,7 +66,7 @@ class ClassificationHead(nn.Sequential):
         return cls
 
 
-class TripletClassificationHead(nn.Sequential):
+class ContrastiveClassificationHead(nn.Sequential):
     def __init__(self, emb_size: int, final_size: int):
         super().__init__()
 
@@ -91,10 +91,10 @@ class PoseViT(nn.Module):
         n_classes: int,
         embedding_size: int,
         seq_size: int,
-        triplet=False,
+        contrastive=False,
         num_layer=2,
         nhead=4,
-        triplet_embedding=512,
+        contrastive_embedding=512,
         device=None,
     ):
         super(PoseViT, self).__init__()
@@ -115,9 +115,9 @@ class PoseViT(nn.Module):
 
         self.to_latent = nn.Identity()
 
-        if triplet:
-            self.clf = TripletClassificationHead(
-                emb_size=embedding_size, final_size=triplet_embedding
+        if contrastive:
+            self.clf = ContrastiveClassificationHead(
+                emb_size=embedding_size, final_size=contrastive_embedding
             )
         else:
             self.clf = ClassificationHead(embedding_size, n_classes)

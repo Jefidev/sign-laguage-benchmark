@@ -8,3 +8,4 @@ wandb
 sklearn
 torchmetrics
 click
+pytorch-metric-learning

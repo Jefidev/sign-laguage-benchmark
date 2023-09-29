@@ -111,3 +111,8 @@ def log_metrics(train_metrics, test_metrics):
 def log_losses(train_loss, test_loss):
     wandb.log({"train loss": train_loss})
     wandb.log({"valid loss": test_loss})
+
+
+def log_confusion_matrix(confusion_matrix, labels):
+    # TODO
+    pass
