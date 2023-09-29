@@ -59,7 +59,7 @@ def run_experiment(labels, experiment, dataset, dry_run):
     sweep_id = wandb.sweep(sweep_config, project=experiment)
 
     # run sweep
-    wandb.agent(sweep_id, function=train, count=20)
+    wandb.agent(sweep_id, function=train, count=25)
 
 
 if __name__ == "__main__":

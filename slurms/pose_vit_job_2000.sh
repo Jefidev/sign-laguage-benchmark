@@ -6,7 +6,7 @@
 #SBATCH --ntasks=1
 #SBATCH --cpus-per-task=8
 #SBATCH --gres="gpu:1"
-#SBATCH --mem-per-cpu=30720 # 30GB
+#SBATCH --mem-per-cpu=4096 # 30GB
 #SBATCH --partition=gpu
 #
 #SBATCH --mail-user=jerome.fink@unamur.be
