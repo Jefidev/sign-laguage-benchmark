@@ -9,3 +9,4 @@ sklearn
 torchmetrics
 click
 pytorch-metric-learning
+scikit-learn
