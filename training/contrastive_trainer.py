@@ -112,8 +112,8 @@ class ContrastiveTrainer:
         )
 
         # transforming to torch
-        probas = torch.from_numpy(probas)
-        labels = torch.from_numpy(labels)
+        probas = torch.from_numpy(probas).to(self.device)
+        labels = torch.from_numpy(labels).to(self.device)
 
         # Compute metrics
         for _, metric in self.train_metrics:
@@ -165,8 +165,8 @@ class ContrastiveTrainer:
         )
 
         # transforme to torch
-        preds = torch.from_numpy(preds)
-        labels = torch.from_numpy(labels)
+        preds = torch.from_numpy(preds).to(self.device)
+        labels = torch.from_numpy(labels).to(self.device)
 
         for _, metric in self.test_metrics:
             metric(preds, labels)
