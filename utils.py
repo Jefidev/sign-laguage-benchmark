@@ -102,10 +102,12 @@ def set_common_metrics(trainer, n_labels):
 
 def log_metrics(train_metrics, test_metrics):
     for metric_name, metric_value in train_metrics:
-        wandb.log({"train " + metric_name: metric_value.compute()})
+        data = {"train " + metric_name: metric_value.compute()}
+        wandb.log(data)
 
     for metric_name, metric_value in test_metrics:
-        wandb.log({"valid " + metric_name: metric_value.compute()})
+        data = {"valid " + metric_name: metric_value.compute()}
+        wandb.log(data)
 
 
 def log_losses(train_loss, test_loss):

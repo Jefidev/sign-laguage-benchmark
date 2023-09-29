@@ -13,7 +13,7 @@ import wandb
 def poseVIT_contrastive(n_labels, dataset_path, project_name, dry_run):
     # Default configuration
     config_defaults = {
-        "n_labels": 250,
+        "n_labels": n_labels,
         "seq_size": 32,
         "n_epochs": 500,
         "data_augmentation": True,
@@ -22,8 +22,8 @@ def poseVIT_contrastive(n_labels, dataset_path, project_name, dry_run):
         "hidden_size": 64,
         "embedding_size": 64,
         "criterion": "NTXent",
-        "dataset": "/home/jeromefink/Documents/unamur/signLanguage/Data/lsfb_v2/isol",
-        "dry_run": True,
+        "dataset": dataset_path,
+        "dry_run": dry_run,
     }
 
     # Sweep configuration
@@ -38,10 +38,6 @@ def poseVIT_contrastive(n_labels, dataset_path, project_name, dry_run):
             "embedding_size": {"values": [32, 64, 128, 256]},
         },
     }
-
-    config_defaults["n_labels"] = n_labels
-    config_defaults["dataset"] = dataset_path
-    config_defaults["dry_run"] = dry_run
 
     sweep_id = wandb.sweep(sweep_config, project=project_name)
 
