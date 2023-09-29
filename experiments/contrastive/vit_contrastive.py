@@ -5,7 +5,7 @@ import torch.nn as nn
 from pytorch_metric_learning import losses
 from schedulers import WarmupLinearScheduler
 import math
-from training import ClassificationTrainer
+from training import ContrastiveTrainer
 from utils import load_datasets, set_common_metrics
 import wandb
 
@@ -101,11 +101,12 @@ def start_run():
     scheduler = WarmupLinearScheduler(optimizer, warmups_steps, config["n_epochs"])
 
     # Create trainer
-    trainer = ClassificationTrainer(
+    trainer = ContrastiveTrainer(
         data,
         model,
         optimizer,
         criterion,
+        config["n_labels"],
         scheduler,
         gradient_clip=config["gradient_clip"],
     )

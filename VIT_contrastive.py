@@ -1,6 +1,6 @@
 import math
 import click
-from experiments.contrastive import poseVIT_prediction
+from experiments.contrastive import poseVIT_contrastive
 import wandb
 
 
@@ -21,7 +21,7 @@ import wandb
 @click.option("--dry-run", is_flag=True)
 def run_experiment(labels, experiment, dataset, dry_run):
     """Run Sign Language Prediction Experiment"""
-    poseVIT_prediction(labels, dataset, experiment, dry_run)
+    poseVIT_contrastive(labels, dataset, experiment, dry_run)
 
 
 if __name__ == "__main__":

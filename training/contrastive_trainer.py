@@ -22,6 +22,7 @@ class ContrastiveTrainer:
         model: Model,
         optimizer: Optimizer,
         criterion: Criterion,
+        n_class: int,
         scheduler=None,
         device: torch.device = None,
         verbose: bool = True,
@@ -44,6 +45,7 @@ class ContrastiveTrainer:
 
         self.train_metrics = []
         self.test_metrics = []
+        self.n_class = n_class
 
         self.current_epoch = 0
 
@@ -85,12 +87,12 @@ class ContrastiveTrainer:
             loss_accum += loss.item()
 
             # Accumulate input and output data
-            if output_embeddings is None:
-                output_embeddings = embeddings.cpu().detach()
+            if embeddings_accum is None:
+                embeddings_accum = embeddings.cpu().detach()
                 targets = target.cpu().detach()
             else:
-                output_embeddings = torch.cat(
-                    (output_embeddings, embeddings.cpu().detach())
+                embeddings_accum = torch.cat(
+                    (embeddings_accum, embeddings.cpu().detach())
                 )
                 targets = torch.cat((targets, target.cpu().detach()))
 
@@ -105,7 +107,13 @@ class ContrastiveTrainer:
 
             progress_bar.set_postfix(loss=loss.item())
 
-        probas, labels = knn_eval(output_embeddings.numpy(), targets.numpy())
+        probas, labels = knn_eval(
+            embeddings_accum.numpy(), targets.numpy(), n_classes=self.n_class
+        )
+
+        # transforming to torch
+        probas = torch.from_numpy(probas)
+        labels = torch.from_numpy(labels)
 
         # Compute metrics
         for _, metric in self.train_metrics:
@@ -140,19 +148,25 @@ class ContrastiveTrainer:
             loss_accum += loss.item()
 
             # Accumulate input and output data
-            if output_embeddings is None:
-                output_embeddings = embeddings.cpu().detach()
+            if embeddings_accum is None:
+                embeddings_accum = embeddings.cpu().detach()
                 targets = target.cpu().detach()
             else:
-                output_embeddings = torch.cat(
-                    (output_embeddings, embeddings.cpu().detach())
+                embeddings_accum = torch.cat(
+                    (embeddings_accum, embeddings.cpu().detach())
                 )
                 targets = torch.cat((targets, target.cpu().detach()))
 
             progress_bar.set_postfix(loss=loss.item())
 
         # Compute metrics
-        preds, labels = knn_eval(output_embeddings.numpy(), targets.numpy())
+        preds, labels = knn_eval(
+            embeddings_accum.numpy(), targets.numpy(), n_classes=self.n_class
+        )
+
+        # transforme to torch
+        preds = torch.from_numpy(preds)
+        labels = torch.from_numpy(labels)
 
         for _, metric in self.test_metrics:
             metric(preds, labels)

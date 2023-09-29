@@ -1,1 +1,2 @@
 from training.classification_trainer import ClassificationTrainer
+from training.contrastive_trainer import ContrastiveTrainer
