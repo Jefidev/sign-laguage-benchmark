@@ -43,11 +43,12 @@ def poseVIT_contrastive(n_labels, dataset_path, project_name, dry_run):
     config_defaults["dataset"] = dataset_path
     config_defaults["dry_run"] = dry_run
 
-    sweep_id = wandb.sweep(sweep_config, project=project_name)
+    # sweep_id = wandb.sweep(sweep_config, project=project_name)
 
     # run sweep
     wandb.init(config=config_defaults)
-    wandb.agent(sweep_id, function=start_run, count=25)
+    # wandb.agent(sweep_id, function=start_run, count=25)
+    start_run()
 
 
 def start_run():
