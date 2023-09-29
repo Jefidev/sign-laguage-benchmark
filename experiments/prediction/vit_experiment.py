@@ -44,9 +44,7 @@ def poseVIT_prediction(n_labels, dataset_path, project_name, dry_run):
 
     # run sweep
     wandb.agent(sweep_id, function=start_run, count=25)
-
-    start_run()
-    pass
+    wandb.init(config=config_defaults)
 
 
 def start_run():
