@@ -47,7 +47,7 @@ def run_experiment(labels, experiment, dataset, dry_run):
         "metric": {"name": "valid balanced accuracy", "goal": "maximize"},
         "parameters": {
             "seq_size": {"values": [16, 32, 64]},
-            "batch_size": {"values": [256, 512, 1024]},
+            "batch_size": {"values": [256, 512]},
             "hidden_size": {"values": [32, 64, 128, 256]},
             "embedding_size": {"values": [32, 64, 128, 256]},
         },
