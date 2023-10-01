@@ -18,7 +18,7 @@ def poseVIT_contrastive(n_labels, dataset_path, project_name, dry_run):
         "n_epochs": 500,
         "data_augmentation": True,
         "gradient_clip": False,
-        "batch_size": 1024,
+        "batch_size": 512,
         "hidden_size": 64,
         "embedding_size": 128,
         "criterion": "NTXent",
