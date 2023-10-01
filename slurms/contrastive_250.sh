@@ -24,5 +24,5 @@ source ./venv/bin/activate
 nvidia-smi
 python VIT_contrastive.py \
  -l 250\
- -e contrastive-250\
+ -e contrastive-test-lucia\
  -d /gpfs/projects/acad/lsfb/datasets/lsfb_v2/isol \
