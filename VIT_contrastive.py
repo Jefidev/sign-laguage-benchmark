@@ -6,7 +6,7 @@ import wandb
 config_defaults = {
     "n_labels": 250,
     "seq_size": 64,
-    "n_epochs": 500,
+    "n_epochs": 300,
     "data_augmentation": True,
     "gradient_clip": False,
     "batch_size": 128,
