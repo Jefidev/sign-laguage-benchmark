@@ -20,7 +20,7 @@ module purge
 module load PyTorch
 
 source ./venv/bin/activate
-pip install -r requirements.txt
+pip install --ignore-installed -r requirements.txt
 nvidia-smi
 python VIT_contrastive.py \
  -l 500\
