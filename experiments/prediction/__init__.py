@@ -1,1 +1,0 @@
-from experiments.prediction.vit_experiment import poseVIT_prediction

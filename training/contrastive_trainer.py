@@ -7,7 +7,7 @@ from datetime import datetime
 from metrics.utils import print_metrics
 from utils import log_metrics, log_losses
 import wandb
-from experiments.contrastive.classifiers.knn_classifier import knn_eval
+from classifiers.knn_classifier import knn_eval
 
 DataLoaders = NewType("DataLoaders", dict[Literal["train", "test"], DataLoader])
 Model = TypeVar("Model", bound=torch.nn.Module)

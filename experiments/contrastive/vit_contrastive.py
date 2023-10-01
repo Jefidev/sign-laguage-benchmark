@@ -10,42 +10,6 @@ from utils import load_datasets, set_common_metrics
 import wandb
 
 
-def poseVIT_contrastive(n_labels, dataset_path, project_name, dry_run):
-    # Default configuration
-    config_defaults = {
-        "n_labels": n_labels,
-        "seq_size": 64,
-        "n_epochs": 500,
-        "data_augmentation": True,
-        "gradient_clip": False,
-        "batch_size": 512,
-        "hidden_size": 64,
-        "embedding_size": 128,
-        "criterion": "NTXent",
-        "dataset": dataset_path,
-        "dry_run": dry_run,
-    }
-
-    # Sweep configuration
-
-    sweep_config = {
-        "method": "bayes",
-        "metric": {"name": "valid balanced accuracy", "goal": "maximize"},
-        "parameters": {
-            "seq_size": {"values": [16, 32, 64]},
-            "batch_size": {"values": [256, 512, 1024]},
-            "hidden_size": {"values": [32, 64, 128, 256]},
-            "embedding_size": {"values": [32, 64, 128, 256]},
-        },
-    }
-
-    sweep_id = wandb.sweep(sweep_config, project=project_name)
-
-    #  run sweep
-    wandb.init(config=config_defaults)
-    wandb.agent(sweep_id, function=start_run, count=25)
-
-
 def start_run():
     config = wandb.config
     warmups_steps = math.floor(config["n_epochs"] * 0.2)
