@@ -8,6 +8,8 @@ from metrics.utils import print_metrics
 from utils import log_metrics, log_losses
 import wandb
 from classifiers.knn_classifier import knn_eval
+from sklearn.model_selection import train_test_split
+from classifiers.knn_classifier import KNNClassifier
 
 DataLoaders = NewType("DataLoaders", dict[Literal["train", "test"], DataLoader])
 Model = TypeVar("Model", bound=torch.nn.Module)
@@ -46,6 +48,7 @@ class ContrastiveTrainer:
         self.train_metrics = []
         self.test_metrics = []
         self.n_class = n_class
+        self.knn_classif = KNNClassifier(n_class=n_class)
 
         self.current_epoch = 0
 
@@ -63,6 +66,7 @@ class ContrastiveTrainer:
 
     def train_epoch(self):
         self.model.train()
+        self.knn_classif.reset()
 
         for _, metric in self.train_metrics:
             metric.reset()
@@ -107,13 +111,17 @@ class ContrastiveTrainer:
 
             progress_bar.set_postfix(loss=loss.item())
 
-        probas, labels = knn_eval(
-            embeddings_accum.numpy(), targets.numpy(), n_classes=self.n_class
+        X_train, X_test, y_train, y_test = train_test_split(
+            embeddings_accum.numpy(), targets.numpy(), test_size=0.4
         )
+
+        self.knn_classif.fit(X_train, y_train)
+
+        probas = self.knn_classif.predict(X_test)
 
         # transforming to torch
         probas = torch.from_numpy(probas).to(self.device)
-        labels = torch.from_numpy(labels).to(self.device)
+        labels = torch.from_numpy(y_test).to(self.device)
 
         # Compute metrics
         for _, metric in self.train_metrics:
@@ -160,13 +168,11 @@ class ContrastiveTrainer:
             progress_bar.set_postfix(loss=loss.item())
 
         # Compute metrics
-        preds, labels = knn_eval(
-            embeddings_accum.numpy(), targets.numpy(), n_classes=self.n_class
-        )
+        preds = self.knn_classif.predict(embeddings_accum.numpy())
 
         # transforme to torch
         preds = torch.from_numpy(preds).to(self.device)
-        labels = torch.from_numpy(labels).to(self.device)
+        labels = targets.to(self.device)
 
         for _, metric in self.test_metrics:
             metric(preds, labels)
