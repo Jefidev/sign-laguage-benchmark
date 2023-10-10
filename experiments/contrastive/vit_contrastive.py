@@ -48,6 +48,8 @@ def start_run():
         criterion = losses.TripletMarginLoss()
     elif config["criterion"] == "NTXent":
         criterion = losses.NTXentLoss()
+    elif config["criterion"] == "SupCon":
+        criterion = losses.SupConLoss()
     else:
         raise ValueError("Criterion not supported")
 

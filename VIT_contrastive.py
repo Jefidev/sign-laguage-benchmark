@@ -12,7 +12,7 @@ config_defaults = {
     "batch_size": 128,
     "hidden_size": 64,
     "embedding_size": 128,
-    "criterion": "NTXent",
+    "criterion": "SupCon",
     "dataset": "/home/jeromefink/Documents/unamur/signLanguage/Data/lsfb_v2/isol",
     "dry_run": True,
 }

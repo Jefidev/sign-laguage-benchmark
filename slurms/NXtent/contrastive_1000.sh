@@ -24,5 +24,5 @@ pip install -r requirements.txt
 nvidia-smi
 python VIT_contrastive.py \
  -l 1000\
- -e SupCon-1000\
+ -e contrastive-1000\
  -d /gpfs/projects/acad/lsfb/datasets/lsfb_v2/isol

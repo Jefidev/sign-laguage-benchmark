@@ -14,7 +14,7 @@
 #
 #SBATCH --account=lsfb
 #
-#SBATCH --output=./output/Contrastive_1000.out
+#SBATCH --output=./output/Contrastive_250.out
 
 module purge
 module load PyTorch
@@ -23,6 +23,6 @@ source ./venv/bin/activate
 pip install -r requirements.txt
 nvidia-smi
 python VIT_contrastive.py \
- -l 1000\
- -e SupCon-1000\
- -d /gpfs/projects/acad/lsfb/datasets/lsfb_v2/isol
+ -l 250\
+ -e contrastive-250\
+ -d /gpfs/projects/acad/lsfb/datasets/lsfb_v2/isol \
